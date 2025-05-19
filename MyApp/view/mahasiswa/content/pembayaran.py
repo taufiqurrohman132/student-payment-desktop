@@ -1,0 +1,6 @@
+import customtkinter as ctk
+
+class Pembayaran(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
+        ctk.CTkLabel(self, text="Ini Konten pembayaran", font=ctk.CTkFont(size=18)).pack(padx=20, pady=20)
