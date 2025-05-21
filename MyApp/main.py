@@ -1,15 +1,22 @@
 import customtkinter as ctk
 from view.mahasiswa.mahasiswa_view import Halaman2
+from view.admin.admin_view import Halaman1
 
 ctk.set_appearance_mode("Light")
 ctk.set_default_color_theme("blue")
 
-root = ctk.CTk()
-root.geometry("700x400")
-root.title("Aplikasi dengan Halaman")
+class Main(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Pindah Tampilan Pakai pack_forget()")
+        self.geometry("400x300")
 
-# Buat dan tampilkan Halaman2
-halaman1 = Halaman2(root)
-halaman1.pack(fill="both", expand=True)
+        self.tampilan_a = Halaman1(self, self)
+        self.tampilan_b = Halaman2(self, self)
 
-root.mainloop()
+        # Mulai dengan menampilkan tampilan A
+        self.tampilan_b.pack(fill="both", expand=True)
+
+if __name__ == "__main__":
+    app = Main()
+    app.mainloop()

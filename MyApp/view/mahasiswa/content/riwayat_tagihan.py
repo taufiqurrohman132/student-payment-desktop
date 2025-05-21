@@ -83,8 +83,8 @@ ctk.set_default_color_theme("blue")
 class RiwayatTagihan(ctk.CTkFrame):
     def __init__(self, master):
         global color
-        super().__init__(master, fg_color="transparent", corner_radius=10)
-        self.pack(padx=20, pady=20)
+        super().__init__(master, fg_color="red", corner_radius=10)
+        self.pack(padx=(20), pady=20)
         self.build_ui()
 
     def build_ui(self):
@@ -95,8 +95,8 @@ class RiwayatTagihan(ctk.CTkFrame):
         ctk.CTkLabel(self, text="Mhasiswa sejahtera Riwayat Tagihan", font=ctk.CTkFont(size=12)).pack(anchor="w", padx=16, pady=(0, 10))
 
         # SECTION ATAS: Billing Summary & Payment Method
-        top_frame = ctk.CTkFrame(self, fg_color="red",corner_radius=10)
-        top_frame.pack(fill="x", pady=(0, 20), padx=6)
+        top_frame = ctk.CTkFrame(self, fg_color="transparent",corner_radius=10)
+        top_frame.pack(fill="x", pady=(0, 20), padx=(6, 200))
 
         top_frame.grid_columnconfigure(0, weight=1)
         top_frame.grid_columnconfigure(1, weight=1)
@@ -115,7 +115,7 @@ class RiwayatTagihan(ctk.CTkFrame):
         bil_mhs.pack(side="left",padx=10, pady=5)
         ctk.CTkButton(billing_frame_top, text="Upgrade", width=100).pack(side="right", padx=10, pady=5)
 
-        billing_frame_in = ctk.CTkFrame(billing_frame, corner_radius=10)
+        billing_frame_in = ctk.CTkFrame(billing_frame, fg_color="transparent", corner_radius=10)
         billing_frame_in.pack(fill="x", pady=(10, 0))
         billing_frame_in.grid_columnconfigure(0, weight=1)
         billing_frame_in.grid_columnconfigure(1, weight=1)
@@ -128,10 +128,8 @@ class RiwayatTagihan(ctk.CTkFrame):
         prodi = ctk.CTkLabel(billing_frame_in, anchor="w", text="T.Informatika", font=ctk.CTkFont(size=14, weight="bold")).grid(row=1, column=1, padx=10, pady=( 0),  sticky="ew")
         thn_masuk = ctk.CTkLabel(billing_frame_in, anchor="w", text="2024", font=ctk.CTkFont(size=14, weight="bold")).grid(row=1, column=2, padx=10, pady=( 0),  sticky="ew")
 
-        billing_status = ctk.CTkLabel(billing_frame, anchor="w", text="Status", font=ctk.CTkFont(size=11))
-        billing_status.pack(side="left", padx=10)
-        billing_status_value = ctk.CTkLabel(billing_frame, anchor="w", text="4000000 sudah di bayar dari 5000000", font=ctk.CTkFont(size=11, weight="bold"))
-        billing_status_value.pack(side="left", padx=10)
+        ctk.CTkLabel(billing_frame, anchor="w", text="Status", font=ctk.CTkFont(size=11)).pack( fill="x", padx=10, pady=(5, 0))
+        ctk.CTkLabel(billing_frame, anchor="w", text="4000000 sudah di bayar dari 5000000", font=ctk.CTkFont(size=11, weight="bold")).pack(fill="x", padx=10, pady=0)
 
         ctk.CTkProgressBar(billing_frame, width=400, height=20, progress_color="blue", determinate_speed=1).pack(fill="x", padx=10)
 
@@ -155,7 +153,7 @@ class RiwayatTagihan(ctk.CTkFrame):
         invoice_frame.pack(fill="both", expand=True)
 
         header_frame = ctk.CTkFrame(invoice_frame, fg_color="transparent")
-        header_frame.pack(fill="x", pady=(0, 10), padx=16)
+        header_frame.pack(fill="x", pady=(0, 10), padx=(16, 200))
 
         ctk.CTkLabel(header_frame, text="Riwayat", font=ctk.CTkFont(size=14, weight="bold")).pack(side="left")
         ctk.CTkButton(header_frame, text="Download", width=100).pack(side="right")
@@ -181,7 +179,7 @@ class RiwayatTagihan(ctk.CTkFrame):
 
         for row in data:
             row_frame = ctk.CTkFrame(invoice_frame, fg_color=color.white)
-            row_frame.pack(fill="x", pady=2, padx=16)
+            row_frame.pack(fill="x", pady=2, padx=(16))
 
             for i, value in enumerate(row):
                 colors = "green" if value == "Paid" else ("orange" if value == "Pending" else "black")
