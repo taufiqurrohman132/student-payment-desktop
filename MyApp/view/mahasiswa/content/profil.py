@@ -1,88 +1,113 @@
 import customtkinter as ctk
+import color
 from PIL import Image
 import os
 
-ctk.set_appearance_mode("light")  # light or dark
-ctk.set_default_color_theme("blue")
-
-
 class Profil(ctk.CTkFrame):
-    def __init__(self, master):
-        super().__init__(master)
-        self.pack(fill="both", expand=True)
+    def __init__(self, master, **kwargs):
+        super().__init__(master, **kwargs)
+       
+        # bg_path = os.path.join(os.path.dirname(__file__), "image.png")
+        # bg_image = ctk.CTkImage(Image.open(bg_path), size=(300, 300))
 
-        # Load icons (pastikan file gambar ada di folder yang sama)
-        folder_path = os.path.join(os.path.dirname(__file__), "folder.png")
-        exe_path = os.path.join(os.path.dirname(__file__), "exe.png")
-        self.folder_icon = ctk.CTkImage(Image.open(folder_path), size=(32, 32))
-        self.excel_icon = ctk.CTkImage(Image.open(exe_path), size=(32, 32))
+        # # Label background (diletakkan di parent langsung)
+        # bg_label = ctk.CTkLabel(self, image=bg_image, text="")
+        # bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.create_widgets()
+        base_frame_scroll = ctk.CTkScrollableFrame(self, fg_color=color.gray)
+        base_frame_scroll.pack(fill="both", expand=True)
+        base_frame_scroll._scrollbar.grid_remove()
 
-    def create_widgets(self):
-        # Header
-        header_frame = ctk.CTkFrame(self)
-        header_frame.pack(fill="x", pady=10, padx=10)
 
-        upload_btn = ctk.CTkButton(header_frame, text="Upload")
-        upload_btn.pack(side="left", padx=5)
+        # Judul Halaman
+        ctk.CTkLabel(base_frame_scroll, text="Data Mahasiswa", font=ctk.CTkFont(size=22, weight="bold"), anchor="w", justify="left").pack(fill="x",padx=16, pady=(10, 5))
+        ctk.CTkLabel(base_frame_scroll, text="Biodata Diri", font=ctk.CTkFont(size=16), anchor="w", justify="left").pack(fill="x", padx=16, pady=(0, 20))
 
-        create_btn = ctk.CTkButton(header_frame, text="Create +")
-        create_btn.pack(side="left", padx=5)
+        # Avatar
+        foto_frame = ctk.CTkFrame(base_frame_scroll, fg_color="transparent")
+        # Load icons profil
+        profil_path = os.path.join(os.path.dirname(__file__), "image.png")
+        profil_icon = ctk.CTkImage(Image.open(profil_path), size=(300, 300))
 
-        search_entry = ctk.CTkEntry(header_frame, placeholder_text="Search")
-        search_entry.pack(side="right", padx=5)
+        avatar = ctk.CTkLabel(foto_frame, image=profil_icon, text="")
+        ubah_foto_btn = ctk.CTkButton(foto_frame, text="Ubah Foto", width=100)
+        avatar.pack()
+        ubah_foto_btn.pack(pady=(5, 10))
+        foto_frame.pack()
 
-        # Folder section
-        folder_frame = ctk.CTkFrame(self)
-        folder_frame.pack(fill="x", padx=10)
 
-        folder_label = ctk.CTkLabel(folder_frame, text="Files > Folder", font=ctk.CTkFont(size=14, weight="bold"))
-        folder_label.pack(anchor="w", pady=5)
+        # Form Grid
+        form_frame = ctk.CTkFrame(base_frame_scroll, fg_color="transparent")
+        form_frame.pack(pady=10, padx=150, fill="x")
+        form_frame.columnconfigure(0, weight=1)  # Biar kolom 0 bisa melar
+        form_frame.columnconfigure(1, weight=1)  # Biar kolom 0 bisa melar
 
-        folders_grid = ctk.CTkFrame(folder_frame)
-        folders_grid.pack(pady=10)
+        # Fungsi pembantu
+        def add_row(row, col1_label, col1_input, col2_label=None, col2_input=None):
+            label1 = ctk.CTkLabel(form_frame, text=col1_label)
+            input1 = col1_input
+            label1.grid(row=row, column=0, sticky="w", padx=5, pady=5)
+            input1.grid(row=row+1, column=0, sticky="ew", padx=5, pady=5)
 
-        for i in range(2):  # 2 rows
-            for j in range(3):  # 3 columns
-                folder = ctk.CTkFrame(folders_grid, width=150, height=90, corner_radius=8, border_width=1)
-                folder.grid(row=i, column=j, padx=10, pady=10)
-                folder.pack_propagate(False)
+            if col2_label and col2_input:
+                label2 = ctk.CTkLabel(form_frame, text=col2_label)
+                input2 = col2_input
+                label2.grid(row=row, column=1, sticky="w", padx=5, pady=5)
+                input2.grid(row=row+1, column=1, padx=5, sticky="ew", pady=5)
 
-                icon_label = ctk.CTkLabel(folder, image=self.folder_icon, text="")
-                icon_label.pack(pady=5)
+        # Input Fields
+        # mhs id
+        ctk.CTkLabel(form_frame, text="Mahasiswa ID").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        mhs_id = ctk.CTkEntry(form_frame, border_color=color.blue)
+        mhs_id.insert(0, "9283823823")
+        mhs_id.grid(row=1, column=0, columnspan=2, sticky="ew", padx=5, pady=5)
 
-                folder_text = ctk.CTkLabel(folder, text="Name of the Folder\n23 files", justify="center")
-                folder_text.pack()
+        # name
+        ctk.CTkLabel(form_frame, text="Nama Lengkap").grid(row=2, column=0, sticky="w", padx=5, pady=5)
+        mhs_name = ctk.CTkEntry(form_frame, border_color=color.blue)
+        mhs_name.insert(0, "Samdola galih")
+        mhs_name.grid(row=3, column=0, columnspan=2, sticky="ew", padx=5, pady=5)
 
-        # Recent files section
-        recent_label = ctk.CTkLabel(self, text="Recent", font=ctk.CTkFont(size=14, weight="bold"))
-        recent_label.pack(anchor="w", padx=10, pady=(20, 0))
+        add_row(4,
+            "NIM", ctk.CTkEntry(form_frame, border_color=color.blue, placeholder_text="04319023"),
+            "Program Studi", ctk.CTkEntry(form_frame,  border_color=color.blue, placeholder_text="Achmad Musyaffa Taufiqi")
+        )
+        add_row(6,
+            "Fakultas", ctk.CTkComboBox(form_frame,  border_color=color.blue, values=["Laki-laki", "Perempuan"]),
+            "Tahun Masuk", ctk.CTkEntry(form_frame,  border_color=color.blue, placeholder_text="Tangerang")
+        )
 
-        table_frame = ctk.CTkFrame(self)
-        table_frame.pack(fill="x", padx=10, pady=10)
+        ctk.CTkFrame(form_frame, height=100, fg_color="transparent").grid(row=8, column=0, columnspan=2, sticky="w", padx=5, pady=5)
+       
+       
+        # add_row(4,
+        #     "Tanggal Lahir", ctk.CTkEntry(form_frame, placeholder_text="01/25/2000"),
+        #     "Golongan Darah", ctk.CTkComboBox(form_frame, values=["A", "B", "AB", "O"])
+        # )
+        # add_row(6,
+        #     "Agama", ctk.CTkComboBox(form_frame, values=["Islam", "Kristen", "Hindu", "Budha", "Lainnya"]),
+        # )
 
-        headers = ["Name", "Modified", "Size", "Owned"]
-        for col, header in enumerate(headers):
-            lbl = ctk.CTkLabel(table_frame, text=header, font=ctk.CTkFont(weight="bold"))
-            lbl.grid(row=0, column=col, padx=10, pady=5, sticky="w")
+        # Alamat
+        # ctk.CTkLabel(form_frame, text="Alamat").grid(row=8, column=0, sticky="w", padx=5, pady=5)
+        # alamat = ctk.CTkTextbox(form_frame, height=60, width=300)
+        # alamat.insert("1.0", "Sidoarjo")
+        # alamat.grid(row=9, column=0, columnspan=2, padx=5, pady=5)
 
-        data = [
-            ("Daily reports.xls", "2/12/2020", "2.3 MB", "John"),
-            ("Daily reports.xls", "2/12/2020", "1.2 MB", "Me"),
-            ("Daily reports.xls", "2/12/2020", "12 MB", "John"),
-            ("Daily reports.xls", "2/12/2020", "22 MB", "John"),
-            ("Daily reports.xls", "2/12/2020", "1.4 MB", "Me"),
-        ]
+        # No Telepon
+        # ctk.CTkLabel(form_frame, text="No Telepon").grid(row=10, column=0, sticky="w", padx=5, pady=5)
+        # ctk.CTkEntry(form_frame, placeholder_text="089121313").grid(row=11, column=0, columnspan=2, padx=5, pady=5)
 
-        for row, (name, mod, size, owner) in enumerate(data, start=1):
-            # Icon + filename
-            ctk.CTkLabel(table_frame, image=self.excel_icon, text=name, compound="left").grid(
-                row=row, column=0, padx=10, pady=3, sticky="w"
-            )
-            # Other columns
-            ctk.CTkLabel(table_frame, text=mod).grid(row=row, column=1, padx=10, pady=3, sticky="w")
-            ctk.CTkLabel(table_frame, text=size).grid(row=row, column=2, padx=10, pady=3, sticky="w")
-            ctk.CTkLabel(table_frame, text=owner).grid(row=row, column=3, padx=10, pady=3, sticky="w")
+        # # Informasi Akademik
+        # ctk.CTkLabel(base_frame_scroll, text="Informasi Akademik", font=ctk.CTkFont(size=16)).pack(pady=(20, 10))
 
+        # akademik_frame = ctk.CTkFrame(base_frame_scroll, fg_color="transparent")
+        # akademik_frame.pack(padx=20)
+
+        # Program Studi dan Dosen Wali
+        # ctk.CTkLabel(akademik_frame, text="Program Studi").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        # ctk.CTkComboBox(akademik_frame, values=["Ilmu Komputer - Teknik Informatika"]).grid(row=1, column=0, padx=5, pady=5)
+
+        # ctk.CTkLabel(akademik_frame, text="Dosen Wali").grid(row=0, column=1, sticky="w", padx=5, pady=5)
+        # ctk.CTkComboBox(akademik_frame, values=["M Rizky Hidayat"]).grid(row=1, column=1, padx=5, pady=5)
 

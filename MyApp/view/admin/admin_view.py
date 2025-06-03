@@ -6,25 +6,33 @@ from .content.laporan import Laporan
 from .content.mahasiswa_view import Mahasiswa
 from .content.metode_pembayaran import MetodePembayaran
 from .content.tagihan import Tagihan
+import color
 
 class Halaman1(ctk.CTkFrame):
     def __init__(self, master, controller):
-        super().__init__(master)
+        super().__init__(master, fg_color=color.gray)
         self.controller = controller
 
         self.grid_columnconfigure(1, weight=1)  # kolom konten kanan
-        self.grid_rowconfigure(0, weight=1)
+        # self.grid_rowconfigure(0, weight=1) # kolom konten kanan
+        self.grid_rowconfigure(1, weight=1)
 
         # Sidebar di kiri
-        sidebar = ctk.CTkFrame(self, width=300)
-        sidebar.grid(row=0, column=0, sticky="ns")
+        sidebar = ctk.CTkFrame(self, width=300, fg_color=color.white)
+        sidebar.grid(row=1, column=0, sticky="ns")
 
         # Solusi penting:
         sidebar.pack_propagate(False)
         sidebar.grid_propagate(False)
 
-        btn_switch = ctk.CTkButton(sidebar, anchor="e", text="Switch", command=self.ke_tampilan_b)
-        btn_switch.pack(pady=5, padx=5, fill="x") 
+        # Toolbar di atas
+        toolbar_r = ctk.CTkFrame(self, height=50, fg_color=color.white)
+        toolbar_r.grid(row=0, column=1, sticky="nsew")
+        toolbar_l = ctk.CTkFrame(self, height=50,corner_radius=0, fg_color=color.white)
+        toolbar_l.grid(row=0, column=0, sticky="nsew", pady=0)
+
+        btn_switch = ctk.CTkButton(toolbar_r, anchor="e", text="Switch", command=self.ke_tampilan_b)
+        btn_switch.pack(pady=5, padx=5)
 
         ctk.CTkLabel(sidebar, text="Navigasi", font=ctk.CTkFont(size=16, weight="bold")).pack(pady=10)
         ctk.CTkButton(sidebar,anchor="w", text="Mahasiswa", command=self.tampilkan_konten1).pack(pady=5, padx=5, fill="x")
@@ -32,11 +40,11 @@ class Halaman1(ctk.CTkFrame):
         ctk.CTkButton(sidebar,anchor="w", text="Tagihan", command=self.tampilkan_konten3).pack(pady=5, padx=5, fill="x")
         ctk.CTkButton(sidebar,anchor="w", text="Pembayaran", command=self.tampilkan_konten4).pack(pady=5, padx=5, fill="x")
         ctk.CTkButton(sidebar,anchor="w", text="Metode Pembayaran", command=self.tampilkan_konten5).pack(pady=5, padx=5, fill="x")
-        ctk.CTkButton(sidebar,anchor="w", text="Laporan", command=self.tampilkan_konten6).pack(pady=5, padx=5, fill="x")
+        # ctk.CTkButton(sidebar,anchor="w", text="Laporan", command=self.tampilkan_konten6).pack(pady=5, padx=5, fill="x")
 
         # Frame konten di kanan, isi akan diganti
-        self.frame_konten = ctk.CTkFrame(self)
-        self.frame_konten.grid(row=0, column=1, sticky="nsew")
+        self.frame_konten = ctk.CTkFrame(self, fg_color=color.gray)
+        self.frame_konten.grid(row=1, column=1, sticky="nsew")
 
         # Inisialisasi dengan Konten1
         self.konten1 = Mahasiswa(self.frame_konten)
@@ -46,6 +54,11 @@ class Halaman1(ctk.CTkFrame):
         self.konten5 = MetodePembayaran(self.frame_konten)
         self.konten6 = Laporan(self.frame_konten)
 
+        self.konten2.pack_forget()
+        self.konten3.pack_forget()
+        self.konten4.pack_forget()
+        self.konten5.pack_forget()
+        self.konten6.pack_forget()
         self.konten1.pack(fill="both", expand=True)
 
     def tampilkan_konten1(self):
